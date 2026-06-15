@@ -214,10 +214,11 @@ Document but do not refactor:
 * TooManyMethods,
 * broad public API exception signature changes,
 * large architectural class splitting
-## Prompt — Phase 3 actual refactoring of CDL.rowToString
+
+## Prompt — Phase 3 actual refactoring
 
 Tool: Codex in VS Code
-Purpose: Refactor the selected PMD-supported code smell in `CDL.rowToString(JSONArray, char)`.
+Purpose: Refactor the selected PMD-supported smell in `CDL.rowToString(JSONArray, char)`.
 
 Exact prompt used:
 
@@ -282,16 +283,111 @@ Codex refactored only `src/main/java/org/json/CDL.java`. The nested logic inside
 * `appendQuotedValue(...)`
 
 Validation:
-Codex ran focused `CDLTest`; 21 tests passed with 0 failures/errors.
+Focused `CDLTest` passed with 21 tests, 0 failures/errors.
+## Prompt — Phase 4 validation and Phase 3/4 documentation
 
----
+Tool: Codex in VS Code
+Purpose: Create refactoring summary, before/after comparison, functional validation, git history, and phase-status documentation.
 
-## Terminal validation after refactoring
+Exact prompt used:
 
-Tool: PowerShell / Maven
-Purpose: Validate that behavior remained unchanged after refactoring.
+```text
+I have completed the actual Phase 3 refactoring for my "Code Smells in the Wild" project using stleary/JSON-java.
 
-Command used:
+IMPORTANT RULES:
+- Do not modify Java source code.
+- Do not modify pom.xml, build.gradle, README, or project configuration.
+- Only create or update files inside docs/project_analysis/.
+- Do not invent test results.
+- Use only existing evidence in docs/project_analysis/ and the current git history.
+
+Context:
+The selected refactoring target was:
+
+File:
+src/main/java/org/json/CDL.java
+
+Method:
+public static String rowToString(JSONArray ja, char delimiter)
+
+PMD smells addressed:
+- CognitiveComplexity = 21
+- CyclomaticComplexity = 13
+- AvoidDeeplyNestedIfStmts near line 195
+
+Manual smells addressed:
+- complex conditional logic,
+- poorly structured method,
+- mixed responsibilities,
+- nested conditional logic.
+
+Refactoring performed:
+- Extract Method
+- Reduced nested conditional logic
+- Added private static helper methods:
+  - appendRowValue(StringBuilder sb, Object object, char delimiter)
+  - shouldQuoteValue(String string, char delimiter)
+  - appendQuotedValue(StringBuilder sb, String string)
+
+Validation evidence:
+- Baseline test before refactoring: docs/project_analysis/test-before-refactor-log.txt
+- Baseline screenshot: docs/project_analysis/test-before-refactor.png
+- Post-refactor test log: docs/project_analysis/test-after-refactor-log.txt
+- Post-refactor screenshot: docs/project_analysis/test-after-refactor.png
+- Git history screenshot: docs/project_analysis/git-commit-history.png
+- Git history text if available: docs/project_analysis/git-commit-history.txt
+
+Create or update these files:
+
+1. docs/project_analysis/refactoring-summary.md
+Include:
+- selected smell,
+- file and method,
+- PMD evidence,
+- manual evidence,
+- refactoring technique,
+- why this improves readability/maintainability,
+- why public API behavior is preserved.
+
+2. docs/project_analysis/before-after-comparison.md
+Include:
+- before code explanation,
+- after code explanation,
+- before vs after table,
+- extracted helper methods and their responsibilities,
+- explanation that logic was moved, not changed.
+
+3. docs/project_analysis/functional-validation.md
+Include:
+- command used before refactoring: mvn test
+- command used after refactoring: mvn test
+- before test result if available,
+- after test result if available,
+- screenshots/log files used as evidence,
+- explanation that behavior remained unchanged.
+
+4. docs/project_analysis/git-commit-history.md
+Use git history evidence if available.
+Explain:
+- commits made for analysis,
+- commits made for refactoring,
+- commits made for validation evidence,
+- why incremental commit history supports the project requirement.
+
+5. docs/project_analysis/phase-status.md
+Create a checklist of Phase 1 to Phase 6.
+Mark:
+- Phase 1 done,
+- Phase 2 done,
+- Phase 3 refactoring done but final report integration pending,
+- Phase 4 validation done but final report integration pending,
+- Phase 5 pending,
+- Phase 6 pending.
+
+After finishing, summarize exactly which files were created or updated.
+```
+
+Terminal validation command used after refactoring:
 
 ```powershell
 mvn test 2>&1 | Tee-Object -FilePath ".\docs\project_analysis\test-after-refactor-log.txt"
@@ -302,17 +398,7 @@ Evidence saved:
 * `docs/project_analysis/test-after-refactor-log.txt`
 * `docs/project_analysis/test-after-refactor.png`
 
-Result:
-The Maven test suite completed successfully after refactoring.
-
----
-
-## Git commit history evidence
-
-Tool: PowerShell / Git
-Purpose: Save commit history evidence for project documentation.
-
-Command used:
+Git history evidence command:
 
 ```powershell
 git log --oneline --decorate --graph -10 | Tee-Object -FilePath ".\docs\project_analysis\git-commit-history.txt"
@@ -322,3 +408,80 @@ Evidence saved:
 
 * `docs/project_analysis/git-commit-history.txt`
 * `docs/project_analysis/git-commit-history.png`
+## Prompt — Phase 5 final report
+
+Tool: Codex in VS Code
+Purpose: Create the final project report using all evidence from `docs/project_analysis`.
+
+Exact prompt used:
+
+```text
+I am preparing Phase 5 final documentation for my "Code Smells in the Wild" project using stleary/JSON-java.
+
+IMPORTANT RULES:
+- Do not modify Java source code.
+- Do not modify pom.xml, build.gradle, README, or project configuration.
+- Only create or update files inside docs/project_analysis/.
+- Do not invent results.
+- Use only evidence already present in docs/project_analysis/.
+- If a PR URL is not available yet, write "PR URL to be added after Phase 6".
+
+Create:
+docs/project_analysis/final-report.md
+
+The final report must include these sections:
+
+1. Introduction
+2. Repository selection justification
+3. Repository setup and build process
+4. Architecture overview
+5. Package/module diagram
+6. Manual code quality analysis
+7. Tool-based PMD analysis
+8. Selected smells for refactoring
+9. Refactoring approach and reasoning
+10. Before vs after code comparison
+11. Functional validation evidence
+12. Git commit history
+13. Pull request submission plan
+14. Challenges faced
+15. Reflection
+
+Use these existing files as sources:
+- repository-selection.md
+- architecture-overview.md
+- manual-analysis.md
+- tool-analysis.md
+- selected-code-smells.md
+- refactoring-target-inspection.md
+- refactoring-summary.md
+- before-after-comparison.md
+- functional-validation.md
+- git-commit-history.md
+- phase-status.md
+- test-before-refactor-log.txt
+- test-after-refactor-log.txt
+
+Important facts:
+- Repository: stleary/JSON-java
+- Fork branch: refactor/code-smell-fixes
+- Selected refactoring target: CDL.rowToString(JSONArray, char)
+- File: src/main/java/org/json/CDL.java
+- PMD smells addressed:
+  - CognitiveComplexity = 21
+  - CyclomaticComplexity = 13
+  - AvoidDeeplyNestedIfStmts near line 195
+- Refactoring technique:
+  - Extract Method
+  - Reduce Nested Conditional
+- Helper methods added:
+  - appendRowValue(...)
+  - shouldQuoteValue(...)
+  - appendQuotedValue(...)
+- Public API behavior preserved.
+- Tests passed before and after refactoring.
+- Do not say the PR was accepted.
+- Say PR will be submitted in Phase 6 / PR URL to be added.
+
+After finishing, summarize exactly which file was created or updated.
+```
