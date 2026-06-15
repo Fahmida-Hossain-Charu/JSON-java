@@ -213,6 +213,112 @@ Document but do not refactor:
 * GodClass in JSONObject/JSONArray,
 * TooManyMethods,
 * broad public API exception signature changes,
-* large architectural class splitting.
+* large architectural class splitting
+## Prompt — Phase 3 actual refactoring of CDL.rowToString
 
-After completing, summarize exactly which files you created or updated.
+Tool: Codex in VS Code
+Purpose: Refactor the selected PMD-supported code smell in `CDL.rowToString(JSONArray, char)`.
+
+Exact prompt used:
+
+```text
+I am now starting Phase 3 refactoring for my "Code Smells in the Wild" project using stleary/JSON-java.
+
+IMPORTANT SAFETY RULES:
+- Modify only this file: src/main/java/org/json/CDL.java
+- Do not modify pom.xml, build.gradle, README, tests, or documentation.
+- Do not reformat the whole file.
+- Do not change public method signatures.
+- Do not change public API behavior.
+- Do not change unrelated methods.
+- Keep the diff minimal and easy to review.
+
+Refactoring target:
+public static String rowToString(JSONArray ja, char delimiter)
+
+Reason:
+This method was selected because PMD reported:
+- CognitiveComplexity = 21
+- CyclomaticComplexity = 13
+- AvoidDeeplyNestedIfStmts near line 195
+
+Manual analysis also identified:
+- complex conditional logic,
+- poorly structured method,
+- mixed responsibilities,
+- nested conditionals.
+
+Goal:
+Reduce complexity and improve readability while preserving exact CSV row output behavior.
+
+Use Extract Method refactoring.
+
+Suggested private static helper methods:
+1. appendRowValue(StringBuilder sb, Object object, char delimiter)
+2. shouldQuoteValue(String string, char delimiter)
+3. appendQuotedValue(StringBuilder sb, String string)
+
+Behavior that must remain exactly the same:
+- delimiter placement between values,
+- null handling,
+- final newline at the end of the row,
+- decision to quote values,
+- behavior when a value contains the delimiter,
+- behavior when a value contains newline or carriage return,
+- behavior when a value starts with a double quote,
+- filtering behavior inside quoted values.
+
+Before finishing:
+1. Show the diff.
+2. Explain why the behavior is unchanged.
+3. Confirm that only src/main/java/org/json/CDL.java was modified.
+```
+
+Output summary:
+Codex refactored only `src/main/java/org/json/CDL.java`. The nested logic inside `rowToString(JSONArray, char)` was extracted into private helper methods:
+
+* `appendRowValue(...)`
+* `shouldQuoteValue(...)`
+* `appendQuotedValue(...)`
+
+Validation:
+Codex ran focused `CDLTest`; 21 tests passed with 0 failures/errors.
+
+---
+
+## Terminal validation after refactoring
+
+Tool: PowerShell / Maven
+Purpose: Validate that behavior remained unchanged after refactoring.
+
+Command used:
+
+```powershell
+mvn test 2>&1 | Tee-Object -FilePath ".\docs\project_analysis\test-after-refactor-log.txt"
+```
+
+Evidence saved:
+
+* `docs/project_analysis/test-after-refactor-log.txt`
+* `docs/project_analysis/test-after-refactor.png`
+
+Result:
+The Maven test suite completed successfully after refactoring.
+
+---
+
+## Git commit history evidence
+
+Tool: PowerShell / Git
+Purpose: Save commit history evidence for project documentation.
+
+Command used:
+
+```powershell
+git log --oneline --decorate --graph -10 | Tee-Object -FilePath ".\docs\project_analysis\git-commit-history.txt"
+```
+
+Evidence saved:
+
+* `docs/project_analysis/git-commit-history.txt`
+* `docs/project_analysis/git-commit-history.png`
