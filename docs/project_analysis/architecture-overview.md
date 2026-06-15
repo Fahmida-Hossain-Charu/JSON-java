@@ -1,137 +1,128 @@
-## Architecture Overview
+# Architecture Overview
 
-  JSON-java is a compact Java 8 library. All production classes are contained in the single org.json package.
+## System Summary
 
-  ### Project Structure
+JSON-java is a compact, library-style Java project that implements JSON parsing,
+construction, navigation, and serialization. It also includes adapters for XML,
+comma-delimited lists, cookies, HTTP headers, and Java properties.
 
-   Location                             Purpose
-  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   src/main/java/org/json               Library implementation
-  ───────────────────────────────────  ────────────────────────────
-   src/test/java/org/json/junit         JUnit 4 tests
-  ───────────────────────────────────  ────────────────────────────
-   src/test/java/org/json/junit/data    Test beans and fixtures
-  ───────────────────────────────────  ────────────────────────────
-   src/test/resources                   JSON/XML parsing fixtures
-  ───────────────────────────────────  ────────────────────────────
-   pom.xml, build.gradle                Maven and Gradle builds
-  ───────────────────────────────────  ────────────────────────────
-   docs, Examples.md                    Documentation and examples
+The project does not have a traditional application `main` method. Client code
+enters the library through public APIs such as `new JSONObject(String)`,
+`new JSONArray(String)`, `XML.toJSONObject(String)`, and `CDL.toJSONArray(String)`.
 
-  ### Main Class Groups
+## Project Structure
 
-  Core JSON model
+| Location | Purpose |
+|---|---|
+| `src/main/java/org/json` | Production library implementation |
+| `src/test/java/org/json/junit` | JUnit tests |
+| `src/test/java/org/json/junit/data` | Test beans and fixtures |
+| `src/test/resources` | JSON and XML parsing fixtures |
+| `pom.xml` | Maven build configuration |
+| `build.gradle`, `gradlew`, `gradlew.bat` | Gradle build configuration and wrapper |
+| `docs`, `Examples.md` | Project documentation and usage examples |
 
-  - src/main/java/org/json/JSONObject.java:77: Map-like JSON object backed by Map<String, Object>.
-  - src/main/java/org/json/JSONArray.java:63: Ordered JSON array backed by ArrayList<Object>.
-  - src/main/java/org/json/JSONTokener.java:17: Streaming character reader and recursive parser dispatcher.
-  - JSONException: Common unchecked exception.
-  - JSONParserConfiguration: Controls strict parsing and duplicate-key behavior.
+All production classes are contained in the main package `org.json`.
 
-  Navigation and serialization
+## Main Components
 
-  - JSONPointer: RFC 6901 navigation across JSONObject and JSONArray.
-  - JSONWriter: Stateful streaming JSON writer.
-  - JSONStringer: JSONWriter specialization that writes into a string.
-  - JSONString: Interface allowing objects to provide custom JSON serialization.
+| Component | Responsibility |
+|---|---|
+| `JSONObject` | Map-like representation of a JSON object; parsing, conversion, lookup, reflection-based wrapping, and serialization |
+| `JSONArray` | Ordered representation of a JSON array; parsing, collection conversion, lookup, and serialization |
+| `JSONTokener` | Character-level tokenizer used by JSON parsers; reads strings, values, whitespace, and syntax positions |
+| `XML` | Converts between XML text and the `JSONObject`/`JSONArray` model |
+| `CDL` | Converts comma-delimited rows and tables to and from JSON arrays and objects |
+| `Cookie`, `CookieList` | Convert cookie text to and from JSON objects |
+| `HTTP`, `HTTPTokener` | Convert HTTP headers to and from JSON objects |
+| `JSONWriter` | Stateful streaming JSON writer |
+| `JSONStringer` | `JSONWriter` specialization that writes into a string |
+| `JSONPointer` | Navigates values inside `JSONObject` and `JSONArray` using RFC 6901 pointers |
+| `JSONException` | Common unchecked exception for parsing and conversion failures |
 
-  Format adapters
+## Key Relationships
 
-  - src/main/java/org/json/XML.java:22, XMLTokener, XMLParserConfiguration: XML-to-JSON conversion.
-  - JSONML: JSONML/XML conversion.
-  - CDL: Comma-delimited data conversion.
-  - HTTP, HTTPTokener: HTTP header conversion.
-  - Cookie, CookieList: Cookie conversion.
-  - Property: Java Properties conversion.
-
-  ## Key Relationships
-
-  String / Reader / InputStream
+```text
+String / Reader / InputStream
             |
             v
        JSONTokener
             |
-            | nextValue()
-            v
-    +-------------------+
-    |                   |
-  JSONObject         JSONArray
-  Map<String,Object> ArrayList<Object>
-    |                   |
-    +---- nested values-+
+       nextValue()
+            |
+      +-----+------+
+      |            |
+      v            v
+ JSONObject     JSONArray
+ Map-like       List-like
+      |            |
+      +-----+------+
             |
             v
-   Scalars: String, Boolean, Number, JSONObject.NULL
+ nested JSON values and scalar values
 
-  JSONPointer ---------> navigates JSONObject / JSONArray
-  JSONWriter ----------> serializes JSONObject / JSONArray
-  XMLTokener ----------> extends JSONTokener
-  XML -----------------> builds JSONObject / JSONArray from XML
+JSONPointer ------> navigates JSONObject / JSONArray
+JSONWriter -------> serializes JSON values
+JSONStringer -----> extends JSONWriter
+XMLTokener -------> extends JSONTokener
+HTTPTokener -----> extends JSONTokener
+XML / CDL / HTTP / Cookie ---> adapt external formats to the JSON model
+```
 
-  ### JSONObject
+## JSON Parsing Flow
 
-  JSONObject is the central object representation. It stores properties in a deliberately unordered HashMap and uses
-  JSONObject.NULL to represent JSON null distinctly from Java null (src/main/java/org/json/JSONObject.java:128).
+The typical flow for `new JSONObject(jsonText)` is:
 
-  It can be constructed from:
+1. The input string is wrapped in a `JSONTokener`.
+2. `JSONObject` checks the opening object delimiter.
+3. The tokenizer reads each key and the required key/value separator.
+4. `JSONTokener.nextValue()` dispatches based on the next token:
+   - `{` creates a nested `JSONObject`.
+   - `[` creates a nested `JSONArray`.
+   - A quote begins string parsing.
+   - Other text is interpreted as a scalar value.
+5. Scalar text is converted into a Boolean, number, `JSONObject.NULL`, or
+   String.
+6. Parsed key/value pairs are placed in the `JSONObject` backing map.
+7. Parsing continues until the closing object delimiter.
 
-  - JSON text or a JSONTokener
-  - Java maps, beans, records, and resource bundles
-  - Other JSONObject instances
+Array parsing follows the same recursive approach. `JSONArray` repeatedly calls
+`JSONTokener.nextValue()` and stores each parsed result in order.
 
-  Nested Java collections, maps, arrays, and beans are converted through JSONObject.wrap() (src/main/java/org/json/
-  JSONObject.java:2938).
+## Library-Style Execution Flow
 
-  ### JSONArray
+Because JSON-java is a reusable library, its execution flow depends on the API
+selected by the caller.
 
-  JSONArray stores ordered values in an ArrayList<Object> (src/main/java/org/json/JSONArray.java:68). Its parser
-  repeatedly calls JSONTokener.nextValue() and adds the resulting nested containers or scalars (src/main/java/org/json/
-  JSONArray.java:96).
+```text
+Client application
+    |
+    +--> JSONObject / JSONArray constructors
+    |       |
+    |       +--> JSONTokener --> nested JSON model
+    |
+    +--> XML / CDL / HTTP / Cookie conversion APIs
+    |       |
+    |       +--> specialized tokenizer or conversion logic
+    |       +--> JSONObject / JSONArray model
+    |
+    +--> JSONWriter / toString / write
+            |
+            +--> serialized JSON text
+```
 
-  ### JSONTokener
+For this project, Phase 1 describes public API entry points and parser/converter
+flows instead of identifying a single executable `main` method.
 
-  JSONTokener wraps a Reader and tracks the current index, line, character, previous character, and EOF state (src/main/
-  java/org/json/JSONTokener.java:17).
+## Architectural Observations Relevant to Phase 2
 
-  Its main responsibilities are:
+- `JSONObject` and `JSONArray` are central classes with many public methods and
+  several responsibilities.
+- Parsing and conversion are distributed across `JSONTokener`, `JSONObject`,
+  `JSONArray`, `XML`, and `CDL`.
+- The single-package architecture is easy to navigate, but it also places many
+  responsibilities and public APIs close together.
+- Existing tests provide a strong baseline for behavior-preserving refactoring.
 
-  - next() reads one character.
-  - back() supports one-character look-behind.
-  - nextClean() skips whitespace.
-  - nextString() parses quoted strings and escape sequences.
-  - nextValue() dispatches to JSONObject, JSONArray, or scalar parsing.
-  - syntaxError() creates location-aware errors.
-
-  ### XML
-
-  XML is a static conversion utility rather than a model class. It uses XMLTokener, recursively processes XML elements,
-  and builds the same JSONObject/JSONArray object model used by JSON parsing (src/main/java/org/json/XML.java:787, src/
-  main/java/org/json/XML.java:251).
-
-  Repeated XML tags are represented using JSONObject.accumulate(), which promotes repeated values into arrays.
-
-  ## JSON Parsing Flow
-
-  For new JSONObject(jsonText):
-
-  1. The string is wrapped in a StringReader, then a JSONTokener.
-  2. JSONObject verifies the first non-whitespace character is {.
-  3. Each key is read using JSONTokener.nextSimpleValue().
-  4. The parser requires : after the key.
-  5. JSONTokener.nextValue() parses the value:
-      - { creates a nested JSONObject.
-      - [ creates a nested JSONArray.
-      - Quotes invoke nextString().
-      - Other text is parsed as a scalar.
-
-  6. Scalar text is converted by JSONObject.stringToValue() into Boolean, JSONObject.NULL, a numeric type, or String
-     (src/main/java/org/json/JSONObject.java:2679).
-
-  7. The resulting value is inserted into the backing map.
-  8. Parsing continues until } is reached.
-
-  Parsing arrays follows the same recursive process, ending at ].
-
-  By default, parsing is lenient and accepts features such as single-quoted strings, unquoted values, trailing commas,
-  and semicolon object separators. JSONParserConfiguration strict mode rejects these extensions and also checks
-  duplicate keys and unparsed trailing content.
+Evidence: `pmd_code_smell.txt`, `test-before-refactor-log.txt`, and direct
+inspection of the production classes.

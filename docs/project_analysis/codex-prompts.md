@@ -116,3 +116,103 @@ Codex attempted further PMD-related commands, but the run was stopped before com
 
 Result:
 The final PMD evidence used for the project is the IntelliJ PMD design/code-smell report already saved under `docs/project_analysis/`, not a modified Maven build configuration.
+## Prompt — Phase 1 and Phase 2 documentation review
+
+Tool: Codex in VS Code  
+Purpose: Review and complete project documentation for repository selection, architecture, manual analysis, tool analysis, and selected code smells.
+
+Exact prompt used:
+```text
+I am working on a software engineering project called "Code Smells in the Wild" using the repository stleary/JSON-java.
+
+Your task is to review and complete the Phase 1 and Phase 2 documentation only.
+
+IMPORTANT RULES:
+
+* Do not modify source code.
+* Do not modify pom.xml, build.gradle, README, or any project configuration.
+* Do not delete existing files.
+* Do not overwrite existing useful content.
+* Only create or update files inside docs/project_analysis/.
+* Use existing evidence already present in docs/project_analysis/.
+* Do not invent results.
+* If evidence is missing, write "Evidence to be added" instead of guessing.
+
+First inspect the existing files inside docs/project_analysis/.
+
+Then create or update these files only if needed:
+
+1. docs/project_analysis/project-evidence-index.md
+   Create an index of all evidence files and explain what each file proves.
+
+2. docs/project_analysis/repository-selection.md
+   Explain why JSON-java satisfies the assignment repository requirements:
+
+* public GitHub repository,
+* Java project,
+* actively maintained,
+* sufficient stars and commits,
+* manageable size,
+* build/test support,
+* suitable for code smell analysis,
+* risk of upstream PR acceptance because large refactors may not be accepted.
+
+3. docs/project_analysis/architecture-overview.md
+   If this file already exists, improve it only if needed.
+   Include:
+
+* project structure,
+* main package org.json,
+* key classes: JSONObject, JSONArray, JSONTokener, XML, CDL, Cookie, HTTP, JSONWriter,
+* relationships between classes,
+* JSON parsing flow,
+* library-style execution flow instead of a traditional main method.
+
+4. docs/project_analysis/manual-analysis.md
+   Create a manual code-smell analysis table with:
+
+* smell type,
+* file/method location,
+* manual evidence,
+* why it is problematic,
+* selected for refactoring yes/no,
+* reason.
+
+Include:
+
+* complex methods,
+* deeply nested conditionals,
+* large classes / god classes,
+* too many public methods,
+* repeated parsing/conversion logic,
+* exception-handling concerns.
+
+5. docs/project_analysis/tool-analysis.md
+   Summarize the PMD/static-analysis evidence already present in docs/project_analysis.
+   Include:
+
+* tool name: PMD,
+* design/code-smell analysis,
+* total violations if available,
+* main categories,
+* important examples from CDL.java, JSONArray.java, JSONObject.java,
+* how tool-based analysis differs from manual analysis.
+
+6. docs/project_analysis/selected-code-smells.md
+   Explain selected and non-selected smells.
+   Primary refactoring target:
+
+* CDL.rowToString(JSONArray, char)
+
+Secondary candidate:
+
+* CDL.getValue(JSONTokener, char), only if safe.
+
+Document but do not refactor:
+
+* GodClass in JSONObject/JSONArray,
+* TooManyMethods,
+* broad public API exception signature changes,
+* large architectural class splitting.
+
+After completing, summarize exactly which files you created or updated.
