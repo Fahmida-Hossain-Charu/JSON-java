@@ -236,12 +236,15 @@ The incremental history supports the project requirement because it separates
 evidence collection, analysis, source refactoring, and validation evidence into
 reviewable steps.
 
-## 13. Pull Request Submission Plan
+## 13. Pull Request Submission
 
-The Pull Request will be submitted in Phase 6 from the fork branch
-`refactor/code-smell-fixes`.
+Phase 6 was completed by creating a clean pull request branch,
+`pr/refactor-cdl-row-serialization`, containing only the source-code refactor
+for `src/main/java/org/json/CDL.java`. The course/evidence branch remains
+`refactor/code-smell-fixes`, and the project documentation files were not
+included in the submitted pull request.
 
-Planned PR message points:
+Submitted PR message points:
 
 - Explain that the change is an internal readability refactor of
   `CDL.rowToString(JSONArray, char)`.
@@ -249,7 +252,8 @@ Planned PR message points:
 - Explain that CSV row output behavior is preserved.
 - Mention that `mvn test` passed after the refactoring.
 
-PR URL to be added after Phase 6.
+Pull request submitted:
+`https://github.com/stleary/JSON-java/pull/1062`
 
 This report does not claim that a PR has been accepted.
 

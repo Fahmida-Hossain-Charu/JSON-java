@@ -7,10 +7,12 @@ Project: Code Smells in the Wild
 
 This file records all prompts used for repository understanding, code smell analysis, refactoring, validation, documentation, and PR preparation.
 
+---
+
 ## Prompt 1 — Architecture overview
 
-Tool: Codex in VS Code
-Date: Monday, 10:28 PM
+Tool: Codex in VS Code  
+Date: Monday, 10:28 PM  
 Purpose: Generate repository architecture overview for Phase 1 documentation.
 
 Exact prompt used:
@@ -19,14 +21,17 @@ Exact prompt used:
 Analyze the JSON-java project structure. Create an architecture overview including: main packages, key classes (JSONObject, JSONArray, JSONTokener, XML), their relationships, and a description of how the library parses JSON.
 ```
 
-Output generated:
+Output generated:  
 Codex produced an architecture overview describing the project structure, main `org.json` classes, relationships between `JSONObject`, `JSONArray`, `JSONTokener`, and `XML`, and the general JSON parsing flow.
 
-Output saved as:
+Output saved as:  
 `docs/project_analysis/architecture-overview.md`
+
+---
+
 ## Prompt 2 — Run PMD and save report
 
-Tool: Codex in VS Code
+Tool: Codex in VS Code  
 Purpose: Find command-line method to run PMD and save output.
 
 Exact prompt used:
@@ -35,17 +40,17 @@ Exact prompt used:
 so how do i run pmd in current directory & also save the output as code smell.txt in this dir
 ```
 
-Codex output summary:
+Codex output summary:  
 Codex suggested running Maven PMD and redirecting the output to `code smell.txt`.
 
-Result:
+Result:  
 The initial command did not fully match the IntelliJ PMD report, because Maven PMD used a different/default configuration.
 
 ---
 
 ## Prompt 3 — Fix PMD command error
 
-Tool: Codex in VS Code
+Tool: Codex in VS Code  
 Purpose: Fix PMD command/run issue.
 
 Exact prompt used:
@@ -54,17 +59,17 @@ Exact prompt used:
 ok didn't run pmd properly has some errors so fix it
 ```
 
-Codex output summary:
+Codex output summary:  
 Codex suggested using Maven PMD output from `target/pmd.txt` and copying it into `code smell.txt`.
 
-Result:
+Result:  
 This produced a PMD report, but it did not match the IntelliJ PMD design-rule output.
 
 ---
 
 ## Prompt 4 — Compare Maven PMD and IntelliJ PMD reports
 
-Tool: Codex in VS Code
+Tool: Codex in VS Code  
 Purpose: Understand why Maven PMD output differed from IntelliJ PMD output.
 
 Exact prompt used:
@@ -73,17 +78,17 @@ Exact prompt used:
 check if code smell.txt is right cause in intellij there are 470 violations in pmd extension also it had specified code smells in those violations like which code smell is that violation why it's not the same here
 ```
 
-Codex output summary:
+Codex output summary:  
 Codex found that Maven PMD and IntelliJ PMD were using different configurations. Codex attempted to align the Maven PMD configuration by editing `pom.xml`.
 
-Result:
+Result:  
 The `pom.xml` edit was rejected because original project build files should not be changed for tool-report generation. The change was undone/restored.
 
 ---
 
 ## Prompt 5 — Repository suitability check
 
-Tool: Codex in VS Code
+Tool: Codex in VS Code  
 Purpose: Check whether JSON-java satisfies project requirements.
 
 Exact prompt used:
@@ -92,17 +97,17 @@ Exact prompt used:
 ok so check if this json java repo meets all requirements marking criteria & all phases tasks here is it a good fit for project?
 ```
 
-Codex output summary:
+Codex output summary:  
 Codex assessed JSON-java as a suitable repository for the project. It identified that the repository is public, Java-based, actively maintained, has many stars/commits, builds locally, and has enough complexity for analysis. It also noted that large unsolicited refactoring PRs are risky.
 
-Result:
+Result:  
 This supported the repository selection justification section.
 
 ---
 
 ## Prompt 6 — Correct PMD code-smell report scope
 
-Tool: Codex in VS Code
+Tool: Codex in VS Code  
 Purpose: Clarify that the required PMD output should focus on code smells/design issues, not general code style.
 
 Exact prompt used:
@@ -111,17 +116,21 @@ Exact prompt used:
 why didn't u identify the code smells there why did u do code style design these are not code smells read the project pdf then generate the code smell.txt running a static analysis via pmd ..see in intellij it showed exact code smell like god class long method long parameter list i wanted u to run pmd then have actual code smells in that txt file like the intellij one
 ```
 
-Codex output summary:
+Codex output summary:  
 Codex attempted further PMD-related commands, but the run was stopped before completion.
 
-Result:
+Result:  
 The final PMD evidence used for the project is the IntelliJ PMD design/code-smell report already saved under `docs/project_analysis/`, not a modified Maven build configuration.
+
+---
+
 ## Prompt — Phase 1 and Phase 2 documentation review
 
 Tool: Codex in VS Code  
 Purpose: Review and complete project documentation for repository selection, architecture, manual analysis, tool analysis, and selected code smells.
 
 Exact prompt used:
+
 ```text
 I am working on a software engineering project called "Code Smells in the Wild" using the repository stleary/JSON-java.
 
@@ -213,11 +222,17 @@ Document but do not refactor:
 * GodClass in JSONObject/JSONArray,
 * TooManyMethods,
 * broad public API exception signature changes,
-* large architectural class splitting
+* large architectural class splitting.
+```
+
+Output summary:  
+Codex created or updated Phase 1 and Phase 2 documentation files inside `docs/project_analysis/`.
+
+---
 
 ## Prompt — Phase 3 actual refactoring
 
-Tool: Codex in VS Code
+Tool: Codex in VS Code  
 Purpose: Refactor the selected PMD-supported smell in `CDL.rowToString(JSONArray, char)`.
 
 Exact prompt used:
@@ -275,18 +290,21 @@ Before finishing:
 3. Confirm that only src/main/java/org/json/CDL.java was modified.
 ```
 
-Output summary:
+Output summary:  
 Codex refactored only `src/main/java/org/json/CDL.java`. The nested logic inside `rowToString(JSONArray, char)` was extracted into private helper methods:
 
 * `appendRowValue(...)`
 * `shouldQuoteValue(...)`
 * `appendQuotedValue(...)`
 
-Validation:
+Validation:  
 Focused `CDLTest` passed with 21 tests, 0 failures/errors.
+
+---
+
 ## Prompt — Phase 4 validation and Phase 3/4 documentation
 
-Tool: Codex in VS Code
+Tool: Codex in VS Code  
 Purpose: Create refactoring summary, before/after comparison, functional validation, git history, and phase-status documentation.
 
 Exact prompt used:
@@ -390,7 +408,7 @@ After finishing, summarize exactly which files were created or updated.
 Terminal validation command used after refactoring:
 
 ```powershell
-mvn test 2>&1 | Tee-Object -FilePath ".\docs\project_analysis\test-after-refactor-log.txt"
+mvn test 2>&1 | Tee-Object -FilePath ".\docs\project_analysis	est-after-refactor-log.txt"
 ```
 
 Evidence saved:
@@ -408,9 +426,12 @@ Evidence saved:
 
 * `docs/project_analysis/git-commit-history.txt`
 * `docs/project_analysis/git-commit-history.png`
+
+---
+
 ## Prompt — Phase 5 final report
 
-Tool: Codex in VS Code
+Tool: Codex in VS Code  
 Purpose: Create the final project report using all evidence from `docs/project_analysis`.
 
 Exact prompt used:
@@ -485,3 +506,82 @@ Important facts:
 
 After finishing, summarize exactly which file was created or updated.
 ```
+
+Output summary:  
+Codex created or updated `docs/project_analysis/final-report.md`.
+
+---
+
+## Prompt — Phase 6 pull request documentation
+
+Tool: Codex in VS Code  
+Purpose: Update project documentation after submitting the clean pull request.
+
+Exact prompt used:
+
+```text
+I have completed Phase 6 pull request submission for my "Code Smells in the Wild" project using stleary/JSON-java.
+
+IMPORTANT RULES:
+- Do not modify Java source code.
+- Do not modify pom.xml, build.gradle, README, or project configuration.
+- Only create or update files inside docs/project_analysis/.
+- Do not invent results.
+- Do not say the PR was accepted.
+- Say only that the PR was submitted.
+
+Pull request information:
+- PR URL: https://github.com/stleary/JSON-java/pull/1062
+- PR branch: pr/refactor-cdl-row-serialization
+- Course/evidence branch: refactor/code-smell-fixes
+- PR source file changed: src/main/java/org/json/CDL.java
+- PR did not include docs/project_analysis files.
+- PR title: Refactor CDL row serialization for readability
+- Evidence screenshot: docs/project_analysis/pr-submission-evidence.png
+
+Update these files:
+
+1. docs/project_analysis/final-report.md
+Replace any "PR URL to be added after Phase 6" placeholder with the actual PR URL.
+Add a short Phase 6 paragraph explaining that a clean pull request branch was created containing only the source-code refactor.
+
+2. docs/project_analysis/phase-status.md
+Mark Phase 6 as completed.
+Mention that PR acceptance is pending maintainer review.
+
+3. docs/project_analysis/project-evidence-index.md
+Add the PR submission screenshot and PR URL as evidence.
+
+4. Create docs/project_analysis/pull-request-submission.md
+Include:
+- PR URL
+- PR branch name
+- base repository and branch
+- compare repository and branch
+- summary of submitted change
+- statement that only CDL.java was included in the PR
+- validation command: mvn test
+- note that acceptance is pending maintainer review
+
+After finishing, summarize exactly which files were created or updated.
+```
+
+Output summary:  
+Codex updated the Phase 6 documentation and recorded the submitted PR URL.
+
+PR URL:  
+`https://github.com/stleary/JSON-java/pull/1062`
+
+---
+
+## Note — Copilot/Codex export cleanup
+
+A raw Copilot/Codex chat export JSON file was initially used as intermediate evidence during the project workflow. The useful prompt and transcript content from that export was converted into readable Markdown evidence files inside `docs/project_analysis/`.
+
+The raw JSON export file was removed from the project evidence folder because the Markdown files are easier to review and are sufficient for documentation.
+
+Relevant readable evidence files:
+
+* `docs/project_analysis/copilot-chat-readable-transcript.md`
+* `docs/project_analysis/copilot-prompts-from-export.md`
+* `docs/project_analysis/codex-prompts.md`

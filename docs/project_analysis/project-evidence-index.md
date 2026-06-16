@@ -15,11 +15,14 @@ marked as requiring additional evidence.
 | `intellij_pmd_code_smell.png` | Screenshot of IntelliJ PMD results showing 470 Design-ruleset violations across 85 scanned files and visible rule counts | Phase 2 tool evidence |
 | `test-before-refactor-log.txt` | Maven baseline test execution: 777 tests, 0 failures, 0 errors, 6 skipped, and `BUILD SUCCESS` | Phase 1 setup and future Phase 4 baseline |
 | `test-before-refactor.png` | Visual evidence of the successful baseline test run | Phase 1 setup and future Phase 4 baseline |
+| `test-after-refactor-log.txt` | Maven post-refactor test execution: 777 tests, 0 failures, 0 errors, 6 skipped, and `BUILD SUCCESS` | Phase 4 validation |
+| `test-after-refactor.png` | Visual evidence of the successful post-refactor test run | Phase 4 validation |
+| `pr-submission-evidence.png` | Screenshot evidence that pull request `https://github.com/stleary/JSON-java/pull/1062` was submitted | Phase 6 pull request submission |
+| `pull-request-submission.md` | Records the submitted PR URL, branch details, change summary, validation command, and pending maintainer-review status | Phase 6 pull request submission |
 | `codex-chat-2-notes.md` | Records the PMD-report generation investigation and the decision not to modify project build configuration for evidence generation | Process evidence |
 | `codex-prompts.md` | Records prompts used with Codex for architecture, PMD investigation, and repository suitability | Process/reflection evidence |
 | `copilot-prompts-from-export.md` | Records prompts extracted from the Copilot export | Process/reflection evidence |
 | `copilot-chat-readable-transcript.md` | Human-readable record of repository search, suitability discussion, initial code-smell observations, and scope decisions | Repository-selection and process evidence |
-| `codex-chat-export.json` | Full raw chat export retained as original supporting evidence | Process evidence |
 
 ## Evidence Gaps
 
