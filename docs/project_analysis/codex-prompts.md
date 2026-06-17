@@ -585,3 +585,55 @@ Relevant readable evidence files:
 * `docs/project_analysis/copilot-chat-readable-transcript.md`
 * `docs/project_analysis/copilot-prompts-from-export.md`
 * `docs/project_analysis/codex-prompts.md`
+## Prompt — PR review response cleanup
+
+Tool: Codex in VS Code  
+Purpose: Address maintainer review comments on PR #1062.
+
+Exact prompt used:
+
+```text
+I need to address maintainer review comments on my pull request for stleary/JSON-java.
+
+IMPORTANT RULES:
+- Modify only this file: src/main/java/org/json/CDL.java
+- Do not modify docs, README, pom.xml, build.gradle, tests, or project configuration.
+- Do not change public API signatures.
+- Do not change behavior.
+- Do not reformat unrelated code.
+- Keep the diff minimal.
+
+Maintainer requested:
+1. Add Javadoc for private method appendRowValue(StringBuilder sb, Object object, char delimiter).
+2. Add Javadoc for private method shouldQuoteValue(String string, char delimiter).
+3. Rename the shouldQuoteValue parameter named string to value.
+4. Refactor the shouldQuoteValue return expression to be easier to read.
+5. Add Javadoc for private method appendQuotedValue(StringBuilder sb, String string).
+6. Rename appendQuotedValue parameter string to value for consistency.
+
+Target methods:
+- appendRowValue(...)
+- shouldQuoteValue(...)
+- appendQuotedValue(...)
+
+Preserve exactly:
+- null handling,
+- delimiter behavior,
+- quote decision behavior,
+- final row output behavior,
+- character filtering behavior,
+- no public method changes.
+
+Suggested structure:
+- appendRowValue should keep the same null handling and append behavior.
+- shouldQuoteValue should:
+  - return false if value is empty
+  - otherwise return the same quote conditions as before:
+    - value contains delimiter
+    - value contains newline
+    - value contains carriage return
+    - value contains character 0
+    - value starts with double quote
+- appendQuotedValue should keep the exact existing character filtering behavior.
+
+After editing, summarize the exact changes and confirm only src/main/java/org/json/CDL.java was modified.

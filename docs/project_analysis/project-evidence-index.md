@@ -18,6 +18,7 @@ marked as requiring additional evidence.
 | `test-after-refactor-log.txt` | Maven post-refactor test execution: 777 tests, 0 failures, 0 errors, 6 skipped, and `BUILD SUCCESS` | Phase 4 validation |
 | `test-after-refactor.png` | Visual evidence of the successful post-refactor test run | Phase 4 validation |
 | `pr-submission-evidence.png` | Screenshot evidence that pull request `https://github.com/stleary/JSON-java/pull/1062` was submitted | Phase 6 pull request submission |
+| `pr-review-response-evidence.png` | Screenshot evidence that the PR branch was updated after maintainer review comments | Phase 6 maintainer review response |
 | `pull-request-submission.md` | Records the submitted PR URL, branch details, change summary, validation command, and pending maintainer-review status | Phase 6 pull request submission |
 | `codex-chat-2-notes.md` | Records the PMD-report generation investigation and the decision not to modify project build configuration for evidence generation | Process evidence |
 | `codex-prompts.md` | Records prompts used with Codex for architecture, PMD investigation, and repository suitability | Process/reflection evidence |

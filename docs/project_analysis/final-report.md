@@ -255,7 +255,14 @@ Submitted PR message points:
 Pull request submitted:
 `https://github.com/stleary/JSON-java/pull/1062`
 
-This report does not claim that a PR has been accepted.
+The maintainer reviewed the PR and requested Javadocs for the new private
+helper methods, a helper parameter rename from `string` to `value`, and a
+simpler quote-decision expression. The PR branch was updated with follow-up
+commit `8353b59` (`Address CDL row serialization review comments`) to address
+those review comments.
+
+This report does not claim that a PR has been accepted. Acceptance is pending
+maintainer review.
 
 ## 14. Challenges Faced
 
