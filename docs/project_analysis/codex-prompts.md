@@ -637,3 +637,45 @@ Suggested structure:
 - appendQuotedValue should keep the exact existing character filtering behavior.
 
 After editing, summarize the exact changes and confirm only src/main/java/org/json/CDL.java was modified.
+```
+## Prompt — PR approval evidence update
+
+Tool: Codex in VS Code  
+Purpose: Update project documentation after maintainer approval of PR #1062.
+
+Exact prompt used:
+
+```text
+I need to update my project evidence after the maintainer approved PR #1062 and started a 3-day comment window.
+
+IMPORTANT RULES:
+- Do not modify Java source code.
+- Do not modify pom.xml, build.gradle, README, or project configuration.
+- Only create or update files inside docs/project_analysis/.
+- Do not invent results.
+- Do not say the PR was merged.
+- Say the PR was approved and is waiting through the maintainer's 3-day comment window.
+
+Context:
+- PR URL: https://github.com/stleary/JSON-java/pull/1062
+- PR branch: pr/refactor-cdl-row-serialization
+- Maintainer reviewed the PR and marked review status as APPROVED.
+- Maintainer added the label "Approved - 3-day window".
+- Maintainer started a 3-day comment window.
+- Evidence screenshot: docs/project_analysis/pr-review-approved-evidence.png
+- PR is not merged yet.
+
+Update:
+1. docs/project_analysis/final-report.md
+   Add a short note in the Pull Request / Phase 6 section saying the PR received maintainer approval and is waiting through a 3-day comment window.
+
+2. docs/project_analysis/pull-request-submission.md
+   Add a section called "Maintainer approval status" explaining that the PR was approved but not yet merged.
+
+3. docs/project_analysis/project-evidence-index.md
+   Add docs/project_analysis/pr-review-approved-evidence.png as evidence.
+
+4. docs/project_analysis/phase-status.md
+   Keep Phase 6 completed. Mention that PR submission and maintainer approval are complete, while merge is pending the comment window.
+
+After finishing, summarize exactly which files were updated.
