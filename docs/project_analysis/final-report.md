@@ -261,8 +261,10 @@ simpler quote-decision expression. The PR branch was updated with follow-up
 commit `8353b59` (`Address CDL row serialization review comments`) to address
 those review comments.
 
-This report does not claim that a PR has been accepted. Acceptance is pending
-maintainer review.
+The maintainer later reviewed the updated PR, marked the review status as
+APPROVED, added the `Approved - 3-day window` label, and started a 3-day
+comment window. The PR is not merged yet; it is approved and waiting through
+the maintainer's 3-day comment window.
 
 ## 14. Challenges Faced
 

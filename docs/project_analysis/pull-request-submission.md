@@ -31,7 +31,14 @@ commit `8353b59`:
 Address CDL row serialization review comments
 ```
 
-Acceptance is pending maintainer review.
+## Maintainer approval status
+
+The maintainer reviewed the updated pull request and marked the review status
+as APPROVED. The PR also received the `Approved - 3-day window` label, and the
+maintainer started a 3-day comment window.
+
+The PR is approved but not yet merged. It is waiting through the maintainer's
+3-day comment window.
 
 ## Validation
 
@@ -41,4 +48,5 @@ Validation command:
 mvn test
 ```
 
-The pull request has been submitted. Acceptance is pending maintainer review.
+The pull request has been submitted, approved by the maintainer, and is waiting
+through the maintainer's 3-day comment window. It has not been merged yet.
