@@ -679,3 +679,46 @@ Update:
    Keep Phase 6 completed. Mention that PR submission and maintainer approval are complete, while merge is pending the comment window.
 
 After finishing, summarize exactly which files were updated.
+```
+## Prompt — PR merged evidence update
+
+Tool: Codex in VS Code  
+Purpose: Update final project documentation after PR #1062 was merged upstream.
+
+Exact prompt used:
+
+```text
+I need to update my project evidence after PR #1062 was merged into stleary/JSON-java.
+
+IMPORTANT RULES:
+- Do not modify Java source code.
+- Do not modify pom.xml, build.gradle, README, or project configuration.
+- Only create or update files inside docs/project_analysis/.
+- Do not invent results.
+
+Context:
+- PR URL: https://github.com/stleary/JSON-java/pull/1062
+- PR title: Refactor CDL row serialization for readability
+- PR branch: pr/refactor-cdl-row-serialization
+- Upstream repository: stleary/JSON-java
+- The maintainer merged 2 commits into stleary:master.
+- Evidence screenshot: docs/project_analysis/pr-merged-evidence.png
+
+Update:
+1. docs/project_analysis/final-report.md
+   Update the Pull Request / Phase 6 section to say the PR was reviewed, approved, and merged into upstream master.
+
+2. docs/project_analysis/pull-request-submission.md
+   Add or update a section called "Merge status" explaining that PR #1062 was merged into stleary:master.
+
+3. docs/project_analysis/project-evidence-index.md
+   Add docs/project_analysis/pr-merged-evidence.png as final PR merge evidence.
+
+4. docs/project_analysis/phase-status.md
+   Mark Phase 6 as fully completed with PR submitted, approved, and merged.
+
+After finishing, summarize exactly which files were updated.
+```
+
+Outcome:
+PR #1062 was merged into `stleary:master`. This completed the optional upstream acceptance/merge outcome for Phase 6.

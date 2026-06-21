@@ -263,8 +263,11 @@ those review comments.
 
 The maintainer later reviewed the updated PR, marked the review status as
 APPROVED, added the `Approved - 3-day window` label, and started a 3-day
-comment window. The PR is not merged yet; it is approved and waiting through
-the maintainer's 3-day comment window.
+comment window. After the review and approval process was completed, the
+maintainer merged the pull request. PR #1062 is now merged into the upstream
+`stleary:master` branch, with 2 commits included in the merge.
+
+Final merge evidence is saved in `pr-merged-evidence.png`.
 
 ## 14. Challenges Faced
 

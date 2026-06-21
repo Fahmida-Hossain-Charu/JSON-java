@@ -20,7 +20,8 @@ marked as requiring additional evidence.
 | `pr-submission-evidence.png` | Screenshot evidence that pull request `https://github.com/stleary/JSON-java/pull/1062` was submitted | Phase 6 pull request submission |
 | `pr-review-response-evidence.png` | Screenshot evidence that the PR branch was updated after maintainer review comments | Phase 6 maintainer review response |
 | `pr-review-approved-evidence.png` | Screenshot evidence that the maintainer approved the PR and started the `Approved - 3-day window` comment period | Phase 6 maintainer approval status |
-| `pull-request-submission.md` | Records the submitted PR URL, branch details, change summary, validation command, maintainer approval status, and pending 3-day comment window | Phase 6 pull request submission |
+| `pr-merged-evidence.png` | Final screenshot evidence that PR #1062 was merged with 2 commits into the upstream `stleary:master` branch | Phase 6 final PR merge evidence |
+| `pull-request-submission.md` | Records the submitted PR URL, branch details, change summary, validation command, maintainer review and approval, and final merge status | Phase 6 pull request submission and merge |
 | `codex-chat-2-notes.md` | Records the PMD-report generation investigation and the decision not to modify project build configuration for evidence generation | Process evidence |
 | `codex-prompts.md` | Records prompts used with Codex for architecture, PMD investigation, and repository suitability | Process/reflection evidence |
 | `copilot-prompts-from-export.md` | Records prompts extracted from the Copilot export | Process/reflection evidence |

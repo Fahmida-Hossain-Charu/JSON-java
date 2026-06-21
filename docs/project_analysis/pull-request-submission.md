@@ -37,8 +37,13 @@ The maintainer reviewed the updated pull request and marked the review status
 as APPROVED. The PR also received the `Approved - 3-day window` label, and the
 maintainer started a 3-day comment window.
 
-The PR is approved but not yet merged. It is waiting through the maintainer's
-3-day comment window.
+## Merge status
+
+After review and approval, PR #1062 was merged into the upstream
+`stleary:master` branch. GitHub records that the maintainer merged 2 commits
+from `Fahmida-Hossain-Charu:pr/refactor-cdl-row-serialization`.
+
+Final merge evidence is saved in `pr-merged-evidence.png`.
 
 ## Validation
 
@@ -48,5 +53,5 @@ Validation command:
 mvn test
 ```
 
-The pull request has been submitted, approved by the maintainer, and is waiting
-through the maintainer's 3-day comment window. It has not been merged yet.
+The pull request was submitted, reviewed, approved by the maintainer, and
+merged into `stleary:master`.
